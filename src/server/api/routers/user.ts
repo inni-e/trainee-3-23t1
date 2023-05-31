@@ -1,4 +1,5 @@
 import { Course, User } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { CleanUserType, MinimalCleanUserType } from "~/components/types/user";
 
@@ -113,5 +114,24 @@ export const userRouter = createTRPCRouter({
           });
       });
       return { users: cleanData };
+    }),
+
+  getUserCourses: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          id: input.userId
+        },
+        include: {
+          Courses: true
+        }
+      })
+      if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
+      const cleanCourses: { id: string, code: string, image: string }[] = []
+      user.Courses.forEach((course) => {
+        cleanCourses.push({ code: course.code, id: course.id, image: "https://insulcontechnical.com/wp-content/uploads/2021/03/12.jpg" })
+      })
+      return { data: cleanCourses }
     }),
 });

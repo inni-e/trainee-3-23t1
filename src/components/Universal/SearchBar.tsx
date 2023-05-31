@@ -14,9 +14,9 @@ const SearchBar = ({ onChange }: { onChange: FunctionStringCallback }) => {
 
   return (
     <form id="search" onSubmit={handleFormSubmit} className="w-full">
-      <div className="bg-secondary drop-shadow rounded-full flex flex-row w-full space-x-4 py-2 px-4">
+      <div className="bg-secondary drop-shadow rounded-full flex flex-row w-full gap-4 py-2 px-4">
         <MagnifyingGlassIcon className="text-black h-6 w-6" />
-        <input type="text" id="query" name="search" className="bg-secondary" placeholder="Search for anything..." />
+        <input type="text" id="query" name="search" className="bg-secondary w-full truncate" placeholder="Search for anything..." />
       </div>
     </form>
   )

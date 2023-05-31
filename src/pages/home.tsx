@@ -39,7 +39,7 @@ const Home: NextPage = () => {
           </div>
 
           {/* Tab Group */}
-          <div className="mt-8 flex flex-row space-x-4">
+          <div className="mt-8 flex flex-row flex-wrap gap-4">
             <ForYouTab selected={forYouSelected} onChange={(res: boolean) => setForYouSelected(res)} />
             <TopTab selected={!forYouSelected} onChange={(res: boolean) => setForYouSelected(res)} />
           </div>

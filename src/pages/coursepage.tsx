@@ -4,20 +4,21 @@ import Layout from "~/components/Layout";
 const CoursePage: NextPage = () => {
   return (
     <Layout>
-      <div>
+      <div className="flex flex-col">
         {/* Banner */}
         <div>
 
         </div>
-
-        {/* Posts section */}
         <div>
+          {/* Posts section */}
+          <div>
 
-        </div>
+          </div>
 
-        {/* Members section */}
-        <div>
+          {/* Members section */}
+          <div>
 
+          </div>
         </div>
       </div>
     </Layout>
