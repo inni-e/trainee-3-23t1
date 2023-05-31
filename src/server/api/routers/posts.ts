@@ -1,3 +1,4 @@
+import { Post } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { CleanPostType, CleanPublicPostType } from "~/components/types/post";
@@ -7,6 +8,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { postData } from "~/types/dataTypes";
 
 export const postsRouter = createTRPCRouter({
   // creates a new post and returns the post id
@@ -118,25 +120,88 @@ export const postsRouter = createTRPCRouter({
     }),
   getLatestPosts: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
-      take: 20,
       orderBy: {
         timePosted: "desc",
       },
     });
-    const cleanData: CleanPostType[] = [];
-    posts.forEach(async (post) => {
-      // assumes course exists
-      const course = await ctx.prisma.course.findFirst({
-        where: {
-          id: post.courseId,
-        },
+
+    type postDataExt = postData & { image: string }
+    const cleanData: postDataExt[] = [];
+
+    await new Promise<void>((resolve, reject) => {
+      posts.forEach(async (post: Post, index) => {
+        // assumes course and user exist
+        const course = await ctx.prisma.course.findFirst({
+          where: {
+            id: post.courseId,
+          },
+        });
+        const user = await ctx.prisma.user.findFirst({
+          where: {
+            id: post.userId
+          }
+        });
+
+        // if (user && course)
+        cleanData.push({
+          author: user!.name,
+          image: user!.image,
+          content: post.content,
+          title: post.title,
+          course: course!.code
+        });
+
+        if (index === posts.length - 1) resolve();
       });
-      cleanData.push({
-        title: post.title,
-        content: post.content,
-        courseCode: course!.code,
-      });
-    });
+    })
+
     return { posts: cleanData };
   }),
+
+  search: publicProcedure
+    .input(z.object({ query: z.string() }))
+    .query(async ({ input, ctx }) => {
+      let posts = await ctx.prisma.post.findMany({
+        where: {
+          title: {
+            search: input.query
+          }
+        }
+      });
+      if (posts.length === 0) return { posts: [] }
+
+      type postDataExt = postData & { image: string }
+      const cleanData: postDataExt[] = [];
+
+      await new Promise<void>((resolve, reject) => {
+        posts.forEach(async (post: Post, index) => {
+          // assumes course and user exist
+          const course = await ctx.prisma.course.findFirst({
+            where: {
+              id: post.courseId,
+            },
+          });
+          const user = await ctx.prisma.user.findFirst({
+            where: {
+              id: post.userId
+            }
+          });
+
+          // if (user && course)
+          cleanData.push({
+            author: user!.name,
+            image: user!.image,
+            content: post.content,
+            title: post.title,
+            course: course!.code
+          });
+
+          if (index === posts.length - 1) resolve();
+        });
+      })
+      return { posts: cleanData };
+    }),
 });
+
+
+

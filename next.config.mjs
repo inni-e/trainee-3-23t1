@@ -8,7 +8,7 @@
 const config = {
   reactStrictMode: true,
   images: {
-    domains: ["jinxrmyuapfqrhyrmxgq.supabase.in"],
+    domains: ["jinxrmyuapfqrhyrmxgq.supabase.in", "insulcontechnical.com"],
   },
 
   /**

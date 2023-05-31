@@ -20,7 +20,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     // logic in here
     // api call to search up the results
-    console.log(query);
+    console.log("hello");
     // make new api call for post data based on query
     // const newPostData = fetch""
     // setAllPosts(newPostData);
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
               </Link>
             </div>
 
-            <AllCourses/>
+            <AllCourses />
           </div>
           <div className="h-0.5 my-12 w-full bg-secondary"></div>
           <div>
@@ -103,7 +103,7 @@ const TopTab = ({ selected, onChange }: { selected: boolean, onChange: CallableF
 const UsersList = () => {
   return (
     <div className="h-full">
-UserList Lmao
+      UserList Lmao
     </div>
   )
 }

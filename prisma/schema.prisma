@@ -80,6 +80,6 @@ model Post {
     course     Course   @relation(fields: [courseId], references: [id])
     courseId   String
     timePosted DateTime @default(now())
-    User       User?    @relation(fields: [userId], references: [id])
-    userId     String?
+    User       User    @relation(fields: [userId], references: [id])
+    userId     String
 }
