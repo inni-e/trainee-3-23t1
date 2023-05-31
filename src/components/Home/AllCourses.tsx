@@ -4,19 +4,19 @@ import Course from "./Course";
 import { api } from "~/utils/api";
 
 const AllCourses = () => {
-  const userId = "clib04y2v0000mamki0hsrbcz"
+  const userId = "clib6czlb0000tl9klkiw48he";
   // CourseData
+  const { data: course } = api.user.getUserCourses.useQuery({ userId });
 
-
-  const { data: course } = api.user.getUserCourses.useQuery({ userId })
   if (!course) return <></>;
+
   return (
     <div className="h-full">
       {course.data.map((course, index) => {
-        return <Course course={course} key={index} />
+        return <Course course={course} key={index} />;
       })}
     </div>
-  )
-}
+  );
+};
 
 export default AllCourses;
